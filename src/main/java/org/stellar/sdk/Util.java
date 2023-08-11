@@ -1,5 +1,6 @@
 package org.stellar.sdk;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -99,4 +100,16 @@ public class Util {
     }
     throw new IllegalArgumentException("native assets are not supported");
   }
+
+    public static byte[] getBytes(BigInteger value) {
+      byte[] bytes = value.toByteArray();
+      if (bytes.length < 8) {
+        byte[] temp = new byte[8];
+        System.arraycopy(bytes, 0, temp, 8 - bytes.length, bytes.length);
+        bytes = temp;
+      } else if (bytes.length > 8) {
+        bytes = Arrays.copyOfRange(bytes, bytes.length - 8, bytes.length);
+      }
+      return bytes;
+    }
 }

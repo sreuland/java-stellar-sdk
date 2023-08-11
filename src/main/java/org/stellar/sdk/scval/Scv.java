@@ -12,7 +12,7 @@ import org.stellar.sdk.xdr.SCVal;
 import org.stellar.sdk.xdr.SCValType;
 
 /** Provides a range of methods to help you build and parse {@link SCVal} more conveniently. */
-public abstract class Scv {
+public class Scv {
 
   /**
    * Build a {@link SCVal} with the type of {@link SCValType#SCV_ADDRESS}.
@@ -112,7 +112,7 @@ public abstract class Scv {
    * @return {@link SCVal} with the type of {@link SCValType#SCV_DURATION}
    */
   public static SCVal toDuration(BigInteger duration) {
-    return new ScvDuration(duration).toSCVal();
+    return ScvDuration.toSCVal(duration);
   }
 
   /**
@@ -123,7 +123,7 @@ public abstract class Scv {
    * @return the duration
    */
   public static BigInteger fromDuration(SCVal scVal) {
-    return ScvDuration.fromSCVal(scVal).getValue();
+    return ScvDuration.fromSCVal(scVal);
   }
 
   /**
@@ -475,22 +475,4 @@ public abstract class Scv {
     ScvVoid.fromSCVal(scVal);
   }
 
-  static byte[] getBytes(BigInteger value) {
-    byte[] bytes = value.toByteArray();
-    if (bytes.length < 8) {
-      byte[] temp = new byte[8];
-      System.arraycopy(bytes, 0, temp, 8 - bytes.length, bytes.length);
-      bytes = temp;
-    } else if (bytes.length > 8) {
-      bytes = Arrays.copyOfRange(bytes, bytes.length - 8, bytes.length);
-    }
-    return bytes;
-  }
-
-  /**
-   * Convert this object to {@link SCVal}.
-   *
-   * @return {@link SCVal}
-   */
-  public abstract SCVal toSCVal();
 }
